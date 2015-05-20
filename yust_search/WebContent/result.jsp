@@ -9,16 +9,19 @@
 </head>
 <body>
 	<form method="POST" action="Bridge">
-		<table width="300" bgcolor="#7FFF00">
-			<tr>
-				<%
-					String query_input = (String) request.getAttribute("query_input");
-				%>
-				<td><INPUT TYPE="TEXT" NAME="query" value="<%=query_input%>" ></td>
-				<td><INPUT TYPE="SUBMIT" VALUE="搜一下"></td>
-			</tr>
+		<table width="500">
+			<td><img src="img/small.png" style="width: 100px; height: 60px"></td>
+			<td><table width="300" bgcolor="#7FFF00">
+					<tr>
+
+						<%
+							String query_input = (String) request.getAttribute("query_input");
+						%>
+						<td><INPUT TYPE="TEXT" NAME="query" value="<%=query_input%>"></td>
+						<td><INPUT TYPE="SUBMIT" VALUE="搜一下"></td>
+					</tr>
+				</table></td>
 		</table>
-		<br> <br>
 	</form>
 	<p>
 		<%
@@ -73,6 +76,12 @@
 				String contentTemp = document.getContent();
 				String contentWithHighlight = contentTemp.substring(22,
 						contentTemp.length() - 2);
+				//这是测试分词系统的。
+				for (int j = 0; j < getHighlightWord(contentWithHighlight).length; j++) {
+					out.print("<br>"
+							+ getHighlightWord(contentWithHighlight)[j]
+							+ "<br>");
+				}
 
 				String highlightWord[] = array_unique(getHighlightWord(contentWithHighlight));
 				//高亮

@@ -18,17 +18,21 @@ import org.entity.Document;
 public class Search {
 
 	private static Client client;
+	private static String INDEX_NAME = "testframe";
+	private static String TYPE = "test";
+	private static String IP_ADDRESS = "127.0.0.1";
+	private static String PORT = "9300";
+	private static int SEARCH_SIZE = 50;
 
 	public static List<Document> doSearch(String query_input) {
+
 		// 连接elasticsearch
 		client = new TransportClient()
-				.addTransportAddress(new InetSocketTransportAddress(
-						"127.0.0.1", 9300));
-		String indexname = "yustsearch_ik";
-		String type = "yust_demo";
+				.addTransportAddress(new InetSocketTransportAddress(IP_ADDRESS,
+						Integer.valueOf(PORT)));
 		String query = query_input;
 
-		List<Document> result = searcher(query, indexname, type);
+		List<Document> result = searcher(query, INDEX_NAME, TYPE);
 		return result;
 	}
 
@@ -39,11 +43,11 @@ public class Search {
 		SearchResponse searchResponse = client.prepareSearch(indexname)
 				.setTypes(type).setSearchType(SearchType.DEFAULT)
 				.setQuery(QueryBuilders.queryString(query))
-				.addHighlightedField("content").setSize(50).execute()
+				.addHighlightedField("content").setSize(SEARCH_SIZE).execute()
 				.actionGet();
 
 		SearchHits hits = searchResponse.getHits();
-		System.out.println("查询到记录数=" + hits.getTotalHits());
+		// System.out.println("查询到记录数=" + hits.getTotalHits());
 		if (hits.getTotalHits() > 0) {
 			for (SearchHit hit : hits) {
 				Map<String, HighlightField> result = hit.highlightFields();
